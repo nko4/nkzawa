@@ -1,0 +1,19 @@
+{
+  "name": "nko4-nkzawa",
+  "version": "0.0.0",
+  "description": "nkzawa",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nko4/nkzawa.git"
+  },
+  "dependencies": {
+    "nko": "*"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}
