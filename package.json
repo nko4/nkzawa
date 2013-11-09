@@ -11,9 +11,30 @@
     "url": "git@github.com:nko4/nkzawa.git"
   },
   "dependencies": {
-    "nko": "*"
+    "nko": "*",
+    "ssh2": "~0.2.13",
+    "docker.io": "~0.7.0",
+    "debug": "~0.7.3",
+    "ssh-keygen": "~0.2.1",
+    "mktmpdir": "~0.1.0",
+    "async": "~0.2.9",
+    "express": "~3.4.4",
+    "hjs": "0.0.6",
+    "hiredis": "~0.1.15",
+    "redis": "~0.9.0",
+    "connect-redis": "~1.4.5",
+    "signal.io": "git://github.com/nkzawa/signal.io",
+    "passport": "~0.1.17",
+    "passport-github": "~0.1.5",
+    "mongoose-json-select": "~0.2.1",
+    "socket.io-passport": "~0.1.0"
   },
   "engines": {
     "node": "0.10.x"
+  },
+  "devDependencies": {
+    "bower": "~1.2.7",
+    "mocha": "~1.14.0",
+    "chai": "~1.8.1"
   }
 }
