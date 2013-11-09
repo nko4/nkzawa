@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{vm.name}} - VM</title>
+    <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='/css/style.css' />
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">VMChat</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="vote">
+            <!-- http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app -->
+            <iframe src="http://nodeknockout.com/iframe/nkzawa" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        {{#user}}
+          <li><a href="#">Hello, {{user.username}}</a></li>
+          <li><a href="/logout">Logout</a></li>
+        {{/user}}
+        {{^user}}
+          <li><a href="/login">Login</a></li>
+        {{/user}}
+        </ul>
+      </div>
+    </div>
+
+    <div class="container">
+        <h1 class="vm-show">
+          <span class="owner">{{vm._creator.username}}</span> / <span class="name">{{vm.name}}</span>
+        </h1>
+      <div class="row">
+        <div class="col-xs-9">
+          <div class="terminal">
+            <div class="list-group commands"></div>
+            <div class="list-group input" style="display:none">
+              <a class="list-group-item input">
+                <img src="{{user.avatarUrl}}" alt="{{user.username}}"/>{{user.username}}
+                 &#36;<input type="text" name="command" value="" autofocus/>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="list-group users">
+          {{#vm.users}}
+            <a class="list-group-item user">
+              <img src="{{avatarUrl}}" alt="{{username}}"/>{{username}}
+            </a>
+          {{/vm.users}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="templates" style="display:none;">
+      <script type="text/plain" class="command">
+        <div class="list-group-item command">
+          <img src="{%command._creator.avatarUrl%}" alt="{%command._creator.username%}"/>{%command._creator.username%}
+          &#36;{%command.command%}
+        </div>
+      </script>
+    </div>
+
+    <script src="/signal.io/socket.io.js"></script>
+    <script src="/bower_components/jquery/jquery.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.js"></script>
+    <script type="text/javascript">
+      var socket = io('/vms/{{vm._id}}/commands', {path: '/signal.io'});
+      var hoganOption = {delimiters: '{% %}'};
+
+      socket.on('connect', function() {
+        var $terminal = $('.terminal');
+        var $commands = $terminal.find('.commands');
+        var $commandInput = $terminal.find('input[name="command"]');
+        var $templates = $('.templates');
+        var commandTemplate = Hogan.compile($templates.find('.command').text(), hoganOption);
+
+        function prepareInput() {
+          $terminal.find('.list-group.input').show();
+
+          // always focus to input
+          setInterval(function() {
+            $commandInput.focus();
+          }, 500);
+        }
+
+        socket.emit('index', function(err, commands) {
+          if (err) return alert(err);
+
+          var html = $.map(commands, function(command) {
+            return commandTemplate.render({command: command});
+          }).join('');
+          $commands.html(html);
+
+          prepareInput();
+        });
+
+        var $command = $('input[name="command"]').keyup(function(e) {
+          if (e.which !== 13) return;
+
+          var command = $command.val();
+          $command.val('');
+
+          socket.emit('exec', {command: command}, function(err, command) {
+            console.log('exec:', err, command);
+            var html = commandTemplate.render({command: command});
+            $commands.append(html);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

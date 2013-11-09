@@ -1,11 +1,11 @@
 
-module.exports = function(socket, next) {
-  if (!socket.request.user) {
-    var err = new Error();
-    err.data = new Error();
-    err.data.status = 401;
+module.exports = function(req, res, next) {
+  if (!req.request.user) {
+    res.send(401);
+    return;
   }
-  next(err);
+
+  next();
 };
 
 

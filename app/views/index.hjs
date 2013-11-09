@@ -9,7 +9,7 @@
     <div class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand">VMChat</a>
+          <a class="navbar-brand" href="/">VMChat</a>
         </div>
         <ul class="nav navbar-nav">
           <li class="vote">
@@ -35,13 +35,13 @@
         <a class="btn btn-primary btn-lg" href="/vms/new">Create a new VM</a>
       {{/user}}
       </div>
-      <div class="row vms"></div>
+      <div class="vms"></div>
     </div>
 
     <div class="templates" style="display:none;">
       <script type="text/plain" class="vm">
         <div class="vm">
-          <h3><a href="/vms/{%vm._id%}">{%vm.name%}</a></h3>
+          <h3><a href="/vms/{%vm._id%}">{%vm._creator.username%} / {%vm.name%}</a></h3>
           <ul class="users clearfix">{%&usersHtml%}</ul>
           <p>{%created%}</p>
         </div>

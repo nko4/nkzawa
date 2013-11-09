@@ -25,5 +25,5 @@ app.get('/auth/github/callback', auth.githubCallback, auth.successCallback);
 // vms
 app.param('vmId', vms.vmId);
 app.get('/vms/new', loginRequired, vms.new);
-//app.get('/vms/:vmId', vms.show);
+app.get('/vms/:vmId', vms.show);
 

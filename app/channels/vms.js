@@ -20,8 +20,8 @@ exports.create = function(req, res) {
 
 exports.index = function(req, res) {
   var conditions = _.pick(req.body, 'name _creator users');
-  var options = {sort: '-created', limit: 15};
   VM.find(conditions)
+    .populate('_creator')
     .populate('users')
     .sort('-created')
     .limit(15)

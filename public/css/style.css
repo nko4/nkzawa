@@ -64,3 +64,40 @@
   height: 48px;
   margin-right: 10px;
 }
+
+.list-group .user img,
+.list-group .command img,
+.list-group .input img {
+  width: 20px;
+  height: 20px;
+  margin-right: 3px;
+}
+
+.terminal {
+  border: 1px solid #dddddd;
+  max-height: 500px;
+}
+
+.terminal .list-group {
+  margin-bottom: 0;
+}
+
+.terminal .list-group-item {
+  border: none;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.terminal .list-group-item:hover {
+  background-color: transparent;
+}
+
+.terminal .input input {
+  border: none;
+  width: 570px;
+}
+
+.terminal .input input:focus {
+  outline: 0 none;
+}
+
