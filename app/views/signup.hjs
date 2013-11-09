@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Signup</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style>
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Signup</h1>
+    <form action="#">
+      <div class="username">
+        <input type="text" name="username" value="" placeholder="Username" maxlength="{{usernameMaxLength}}"/>
+        <div class="error"></div>
+      </div>
+      <input type="submit" value="Create my account" />
+    </form>
+
+    <script src="/signal.io/socket.io.js"></script>
+    <script src="/components/jquery/jquery.js"></script>
+    <script type="text/javascript">
+      var socket = io('/signup', {path: '/signal.io'});
+
+      $(function() {
+        var $form = $('form');
+        var $username = $form.find('.username');
+        var $usernameInput = $username.find('input[name="username"]');
+        var $usernameError = $username.find('.error');
+        var isValid = false;
+
+        function validate(username) {
+          isValid = false;
+          socket.emit('validate', {username: username}, function(err, data) {
+            console.log('validate:', err, data);
+            if (err) {
+              return alert(err);
+            }
+            $usernameError.text(data.username || '');
+            isValid = !!(username && !data.username)
+          });
+        });
+
+        var _username = '';
+        setInterval(function() {
+          var username = $usernameInput.val();
+          if (username === _username) return;
+
+          _username = username;
+          validate(username);
+        }, 1000);
+
+        $form.keypress(function(e) {
+          return e.which !== 13;
+        }).submit(function(e) {
+          e.preventDefault() ;
+          if (!isValid) return;
+
+          var username = $usernameInput.val();
+          socket.emit('create:', {username: username}, function(err, user) {
+            console.log('create', err, user);
+            if (err) {
+              return alert(err);
+            }
+            location.href = '/';
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
+
