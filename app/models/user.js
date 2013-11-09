@@ -3,14 +3,16 @@ var mongoose = require('mongoose')
   , _ = require('lodash')
   , check = require('validator').check
   , jsonSelect = require('mongoose-json-select')
-  , plugins = require('./plugins');
+  , keygen = require('ssh-keygen')
+  , plugins = require('./plugins')
+  , mktmpdir = require('mktmpdir');
 
 
 var schema = new mongoose.Schema({
   username: String,
   loweredUsername: {type: String, index: true, unique: true, sparse: true, select: false},
-  key: String,
-  pubkey: String,
+  key: {type: String, required: true},
+  pubkey: {type: String, required: true},
   github: {
     id: {type: String, index: true, unique: true, sparse: true, select: false},
     accessToken: {type: String, select: false},
@@ -70,10 +72,19 @@ usernamePath.validate(function(username, respond) {
 }, 'alreadyTaken');
 
 
+schema.pre('validate', function(next) {
+  if (this.isNew) {
+    this.keygen(next);
+  } else {
+    next();
+  }
+});
+
 schema.pre('save', function(next) {
   if (!this.loweredUsername && this.username) {
     this.loweredUsername = this.username.toLowerCase();
   }
+
   next();
 });
 
@@ -129,6 +140,25 @@ schema.statics.saveGithubUser = function(accessToken, refreshToken, profile, cal
   ], callback);
 };
 
+schema.methods.keygen = function(callback) {
+  var self = this;
+
+  mktmpdir(function(err, dir, done) {
+    if (err) return callback(err);
+
+    keygen({
+      location: dir + '/id_rsa',
+      password: '',
+      read: true
+    }, function(err, out) {
+      if (err) return done(err);
+
+      self.key = out.key;
+      self.pubkey = out.pubKey;
+      done();
+    });
+  }, callback);
+};
 
 var User = module.exports = mongoose.model('User', schema);
 
