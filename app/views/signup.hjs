@@ -3,11 +3,7 @@
   <head>
     <title>Signup</title>
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
-    <style>
-      .error {
-        color: red;
-      }
-    </style>
+    <link rel='stylesheet' href='/css/style.css' />
   </head>
   <body>
     <h1>Signup</h1>

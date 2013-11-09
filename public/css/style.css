@@ -1,6 +1,7 @@
+
 .container {
   max-width: none !important;
-  width: 970;
+  width: 970px;
 }
 
 .navbar-header {
@@ -28,8 +29,21 @@
   color: #428BCA;
 }
 
+/* vote button */
 .nav > li.vote {
   position: relative;
   display: block;
   padding: 12px 15px 0 15px;
+}
+
+.error {
+  color: red;
+}
+
+.form-vm {
+  max-width: 330px;
+  margin: 0 auto;
+}
+.form-vm .form-control {
+  margin: 10px 0;
 }

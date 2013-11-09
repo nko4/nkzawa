@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VMChat</title>
+    <title>New VM</title>
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/css/style.css' />
   </head>
@@ -18,23 +18,44 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-        {{#user}}
           <li><a href="#">Hello, {{user.username}}</a></li>
           <li><a href="/logout">Logout</a></li>
-        {{/user}}
-        {{^user}}
-          <li><a href="/login">Login</a></li>
-        {{/user}}
         </ul>
       </div>
     </div>
 
     <div class="container">
-    {{#user}}
-      <a class="btn btn-primary btn-lg" href="/vms/new">Create a new VM</a>
-    {{/user}}
+      <form class="form-vm" action="#">
+        <input type="text" class="form-control" name="name" placeholder="VM name" required autofocus/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Create VM</button>
+      </form>
     </div>
+
+    <script src="/signal.io/socket.io.js"></script>
     <script src="/bower_components/jquery/jquery.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript">
+      var socket = io('/vms', {path: '/signal.io'});
+
+      $(function() {
+        var $form = $('.form-vm');
+        var $name = $form.find('input[name="name"]');
+
+        $form.submit(function(e) {
+          e.preventDefault();
+
+          var name = $name.val();
+          if (!name) return;
+
+          socket.emit('create', {name: name}, function(err, vm) {
+            console.log('create:', err, vm);
+            if (err) {
+              return alert(err);
+            }
+            location.href = '/vms/' + encodeURIComponent(vm._id);
+          });
+        });
+      });
+    </script>
   </body>
 </html>
