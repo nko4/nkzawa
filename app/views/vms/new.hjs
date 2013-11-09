@@ -40,9 +40,11 @@
       $(function() {
         var $form = $('.form-vm');
         var $name = $form.find('input[name="name"]');
+        var $submit = $form.find('button[type="submit"]');
 
         $form.submit(function(e) {
           e.preventDefault();
+          $submit.prop('disabled', true);
 
           var name = $name.val();
           if (!name) return;
@@ -50,6 +52,7 @@
           socket.emit('create', {name: name}, function(err, vm) {
             console.log('create:', err, vm);
             if (err) {
+              $submit.prop('disabled', false);
               return alert(err);
             }
             location.href = '/vms/' + encodeURIComponent(vm._id);

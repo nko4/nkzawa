@@ -10,7 +10,10 @@ exports.create = function(req, res) {
 
   var vm = new VM(data);
   vm.save(function(err, vm) {
-    if (err) return res.send(500);
+    if (err) {
+      console.error('Failed to create VM: ', err);
+      return res.send(500);
+    }
     res.send(vm);
   });
 };
