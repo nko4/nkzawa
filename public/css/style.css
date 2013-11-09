@@ -1,0 +1,35 @@
+.container {
+  max-width: none !important;
+  width: 970;
+}
+
+.navbar-header {
+  float: left;
+}
+.navbar-nav {
+  float: left;
+  margin: 0;
+}
+.navbar-nav > li {
+  float: left;
+}
+.navbar-nav.navbar-right {
+  float: right;
+}
+
+.navbar-default {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-brand {
+  font-weight: bold;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #428BCA;
+}
+
+.nav > li.vote {
+  position: relative;
+  display: block;
+  padding: 12px 15px 0 15px;
+}

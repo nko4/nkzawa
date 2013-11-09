@@ -3,15 +3,33 @@
   <head>
     <title>VMChat</title>
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='/css/style.css' />
   </head>
   <style>
   </style>
   <body>
-    <!-- http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app -->
-    <iframe src="http://nodeknockout.com/iframe/nkzawa" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>
   {{#user}}
-    <p>Hello, {{user.username}}</p>
-    <p><a href="/logout">Logout</a></p>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand">VMChat</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="vote">
+            <!-- http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app -->
+            <iframe src="http://nodeknockout.com/iframe/nkzawa" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Hello, {{user.username}}</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container">
+      <a class="btn btn-primary btn-lg">Create new VM</a>
+    </div>
   {{/user}}
   {{^user}}
     <p><a href="/login">Login</a></p>
