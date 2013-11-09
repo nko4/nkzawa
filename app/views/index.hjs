@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>VMChat</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
   </head>
   <style>
   </style>
@@ -16,5 +16,7 @@
   {{^user}}
     <p><a href="/login">Login</a></p>
   {{/user}}
+    <script src="/bower_components/jquery/jquery.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
   </body>
 </html>

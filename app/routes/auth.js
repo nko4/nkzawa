@@ -20,8 +20,8 @@ exports.logout = function(req, res) {
 exports.signup = function(req, res) {
   if (req.user) return res.redirect('/');
 
-  var passport = req.session.passport
-    , userId = passport ? passport._user : null;
+  var sessionPassport = req.session.passport
+    , userId = sessionPassport ? sessionPassport._user : null;
 
   passport.deserializeUser(userId, function(err, user) {
     if (!user) {

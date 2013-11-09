@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Signup</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <style>
       .error {
         color: red;
@@ -20,7 +20,8 @@
     </form>
 
     <script src="/signal.io/socket.io.js"></script>
-    <script src="/components/jquery/jquery.js"></script>
+    <script src="/bower_components/jquery/jquery.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript">
       var socket = io('/signup', {path: '/signal.io'});
 
@@ -39,9 +40,9 @@
               return alert(err);
             }
             $usernameError.text(data.username || '');
-            isValid = !!(username && !data.username)
+            isValid = !!(username && !data.username);
           });
-        });
+        }
 
         var _username = '';
         setInterval(function() {
@@ -59,8 +60,8 @@
           if (!isValid) return;
 
           var username = $usernameInput.val();
-          socket.emit('create:', {username: username}, function(err, user) {
-            console.log('create', err, user);
+          socket.emit('create', {username: username}, function(err, user) {
+            console.log('create:', err, user);
             if (err) {
               return alert(err);
             }
