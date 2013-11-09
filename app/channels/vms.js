@@ -18,3 +18,15 @@ exports.create = function(req, res) {
   });
 };
 
+exports.index = function(req, res) {
+  var conditions = _.pick(req.body, 'name _creator users');
+  var options = {sort: '-created', limit: 15};
+  VM.find(conditions)
+    .populate('users')
+    .sort('-created')
+    .limit(15)
+    .exec(function(err, vms) {
+      if (err) return res.send(500);
+      res.send(vms);
+    });
+};

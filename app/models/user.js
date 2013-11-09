@@ -23,7 +23,7 @@ var schema = new mongoose.Schema({
 });
 
 var PUBLIC_PROPS = [
-  '_id', 'username', 'created', 'updated', 'avararUrl'
+  '_id', 'username', 'created', 'updated', 'avatarUrl'
 ];
 
 schema.plugin(plugins.updated);

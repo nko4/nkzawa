@@ -1,5 +1,6 @@
 
 module.exports = function(schema, options) {
-  schema.set('toObject', {getters: true});
-  schema.set('toJSON', {getters: true});
+  // fix bug of mongoose with `minimize`
+  schema.set('toObject', {getters: true, minimize: false});
+  schema.set('toJSON', {getters: true, minimize: false});
 };

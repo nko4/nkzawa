@@ -3,6 +3,7 @@ var mongoose = require('mongoose')
   , net = require('net')
   , check = require('validator').check
   , docker = require('docker.io')()
+  , jsonSelect = require('mongoose-json-select')
   , root = require('../utils/root')
   , Schema = mongoose.Schema
   , ObjectId = Schema.ObjectId;
@@ -19,8 +20,12 @@ var schema = new Schema({
   users: [{type: ObjectId, ref: 'User'}],
   containerId: String,
   containerData: Object,
-  created: {type: Date, default: Date.now}
+  created: {type: Date, default: Date.now, index: true}
 });
+
+schema.index({name: 1, created: -1});
+
+schema.plugin(jsonSelect, 'name _creator users created');
 
 var namePath = schema.path('name');
 namePath.validate(function(value) {

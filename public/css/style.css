@@ -40,10 +40,27 @@
   color: red;
 }
 
+/* form for vm */
 .form-vm {
   max-width: 330px;
   margin: 0 auto;
 }
 .form-vm .form-control {
   margin: 10px 0;
+}
+
+/* vm list */
+.vm .users {
+  padding: 0;
+}
+
+.vm li.user {
+  list-style: none;
+  float: left;
+}
+
+.vm .user img {
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
 }

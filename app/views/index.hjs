@@ -30,11 +30,62 @@
     </div>
 
     <div class="container">
-    {{#user}}
-      <a class="btn btn-primary btn-lg" href="/vms/new">Create a new VM</a>
-    {{/user}}
+      <div class="page-header">
+      {{#user}}
+        <a class="btn btn-primary btn-lg" href="/vms/new">Create a new VM</a>
+      {{/user}}
+      </div>
+      <div class="row vms"></div>
     </div>
+
+    <div class="templates" style="display:none;">
+      <script type="text/plain" class="vm">
+        <div class="vm">
+          <h3><a href="/vms/{%vm._id%}">{%vm.name%}</a></h3>
+          <ul class="users clearfix">{%&usersHtml%}</ul>
+          <p>{%created%}</p>
+        </div>
+      </script>
+      <script type="text/plain" class="user">
+        <li class="user"><img src="{%user.avatarUrl%}" alt="{%user.username%}"/></li>
+      </script>
+    </div>
+
+    <script src="/signal.io/socket.io.js"></script>
     <script src="/bower_components/jquery/jquery.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.js"></script>
+    <script src="/bower_components/moment/moment.js"></script>
+    <script type="text/javascript">
+      var socket = io('/vms', {path: '/signal.io'});
+      var hoganOption = {delimiters: '{% %}'};
+
+      socket.on('connect', function() {
+        var $templates = $('.templates');
+
+        socket.emit('index', function(err, vms) {
+          if (err) return alert(err);
+
+          var $vms = $('.vms');
+          var vmTemplate = Hogan.compile($templates.find('.vm').text(), hoganOption);
+          var userTemplate = Hogan.compile($templates.find('.user').text(), hoganOption);
+
+          var vmsHtml = $.map(vms, function(vm) {
+            var usersHtml = $.map(vm.users, function(user) {
+              return userTemplate.render({user: user});
+            }).join('');
+
+            console.log(vm);
+            return vmTemplate.render({
+              vm: vm,
+              usersHtml: usersHtml,
+              created: moment(vm.created).fromNow()
+            });
+          }).join('');
+
+          $vms.html(vmsHtml);
+        });
+      });
+    </script>
   </body>
 </html>

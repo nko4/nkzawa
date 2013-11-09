@@ -11,5 +11,6 @@ io.connect('/signup', signup.notLoggedIn, function(socket) {
 
 io.connect('/vms', loginRequired, function(socket) {
   socket.on('create', vms.create);
+  socket.on('index', vms.index);
 });
 
