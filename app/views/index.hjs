@@ -51,7 +51,7 @@
     <div class="templates" style="display:none;">
       <script type="text/plain" class="vm">
         <div class="vm">
-          <h3><a href="/vms/{%vm._id%}">{%vm._creator.username%} / {%vm.name%}</a></h3>
+          <h3 class="h4"><a href="/vms/{%vm._id%}">{%vm._creator.username%} / {%vm.name%}</a></h3>
           <ul class="users clearfix">{%&usersHtml%}</ul>
           <p>{%created%}</p>
         </div>
@@ -60,6 +60,7 @@
         <li class="user"><img src="{%user.avatarUrl%}" alt="{%user.username%}"/></li>
       </script>
     </div>
+    <hr/>
 
     <script src="/signal.io/socket.io.js"></script>
     <script src="/bower_components/jquery/jquery.js"></script>
@@ -72,27 +73,29 @@
 
       socket.on('connect', function() {
         var $templates = $('.templates');
+        var vmTemplate = Hogan.compile($templates.find('.vm').text(), hoganOption);
+        var userTemplate = Hogan.compile($templates.find('.user').text(), hoganOption);
+        var $vms = $('.vms');
 
-        socket.emit('index', function(err, vms) {
-          if (err) return alert(err);
-
-          var $vms = $('.vms');
-          var vmTemplate = Hogan.compile($templates.find('.vm').text(), hoganOption);
-          var userTemplate = Hogan.compile($templates.find('.user').text(), hoganOption);
-
-          var vmsHtml = $.map(vms, function(vm) {
-            var usersHtml = $.map(vm.users, function(user) {
-              return userTemplate.render({user: user});
-            }).join('');
-
-            console.log(vm);
-            return vmTemplate.render({
-              vm: vm,
-              usersHtml: usersHtml,
-              created: moment(vm.created).fromNow()
-            });
+        function createVmHtml(vm) {
+          var usersHtml = $.map(vm.users, function(user) {
+            return userTemplate.render({user: user});
           }).join('');
 
+          return vmTemplate.render({
+            vm: vm,
+            usersHtml: usersHtml,
+            created: moment(vm.created).fromNow()
+          });
+        }
+
+        socket.emit('index', function(err, vms) {
+          if (err) {
+            console.log(err);
+            return;
+          }
+
+          var vmsHtml = $.map(vms, createVmHtml).join('');
           $vms.html(vmsHtml);
         });
       });

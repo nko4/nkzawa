@@ -84,6 +84,10 @@
   margin-right: 3px;
 }
 
+h1.vm-show {
+  font-size: 24px;
+}
+
 .terminal {
   max-height: 500px;
   overflow: auto;
@@ -95,6 +99,14 @@
   width: 48px;
   height: 48px;
   margin-top: 10px;
+}
+
+.terminal h4 {
+  font-size: 14px;
+}
+
+.terminal .output {
+  font-size: 12px;
 }
 
 .command-input-group {

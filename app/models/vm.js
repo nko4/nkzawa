@@ -72,7 +72,7 @@ schema.methods.addUser = function(userId, isSudoer, callback) {
   User.findById(userId, function(err, user) {
     if (err) return callback(err);
     if (!user) return callback(new Error('No user exists'));
-    if (!self.host) callback(new Error('Vm doesn\'t start'));
+    if (!self.host) return callback(new Error('Vm doesn\'t start'));
 
     root.ssh(self.host, function(err, ssh) {
       if (err) return callback(err);
@@ -81,7 +81,7 @@ schema.methods.addUser = function(userId, isSudoer, callback) {
         if (err) return callback(err);
 
         self.users.push(user);
-        callback(user);
+        callback(null, user);
       });
     });
   });

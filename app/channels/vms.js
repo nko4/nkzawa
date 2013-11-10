@@ -54,7 +54,9 @@ exports.addUser = function(req, res) {
       vm.addUser(user._id, function(err, user) {
         if (err) return res.send(500, err.toString());
 
-        res.broadcast.send(user);
+        vm.save(function(err, vm) {
+          res.broadcast.send(user);
+        });
       });
     });
   });
