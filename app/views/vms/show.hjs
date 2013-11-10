@@ -72,7 +72,7 @@
     <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.js"></script>
     <script type="text/javascript">
-      var socket = io('/vms/{{vm._id}}/commands', {path: '/signal.io'});
+      var socket = io('/vms/{{vm._id}}/shell', {path: '/signal.io'});
       var hoganOption = {delimiters: '{% %}'};
 
       socket.on('connect', function() {
@@ -108,7 +108,7 @@
           if (e.which !== 13) return;
 
           var command = input.value();
-          socket.emit('write', {command: command});
+          socket.emit('write', command);
           input.clear();
         });
       });

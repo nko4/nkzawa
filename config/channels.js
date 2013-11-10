@@ -2,7 +2,7 @@ var io = require('./io')
   , loginRequired = require('./io-middlewares/login-required')
   , signup = require('../app/channels/signup')
   , vms = require('../app/channels/vms')
-  , commands = require('../app/channels/vms/commands');
+  , shell = require('../app/channels/vms/shell');
 
 
 io.connect('/signup', signup.notLoggedIn, function(socket) {
@@ -15,7 +15,6 @@ io.connect('/vms', function(socket) {
   socket.on('index', vms.index);
 });
 
-io.connect('/vms/:vmId/commands', commands.ssh, function(socket) {
-  socket.on('write', loginRequired, commands.write);
-  socket.on('index', commands.index);
+io.connect('/vms/:vmId/shell', shell.ssh, function(socket) {
+  socket.on('write', loginRequired, shell.write);
 });
