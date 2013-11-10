@@ -4,6 +4,7 @@
   "description": "nkzawa",
   "main": "server.js",
   "scripts": {
+    "install": "cd ./public; ../node_modules/.bin/bower install",
     "start": "node server.js"
   },
   "repository": {
