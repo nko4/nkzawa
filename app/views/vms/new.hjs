@@ -27,7 +27,7 @@
     <div class="container">
       <form class="form-vm" action="#">
         <input type="text" class="form-control" name="name" placeholder="VM name" required autofocus/>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Create VM</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" data-loading-text="Loading...">Create VM</button>
       </form>
     </div>
 
@@ -44,15 +44,18 @@
 
         $form.submit(function(e) {
           e.preventDefault();
-          $submit.prop('disabled', true);
 
           var name = $name.val();
           if (!name) return;
+
+          $submit.prop('disabled', true);
+          $submit.button('loading');
 
           socket.emit('create', {name: name}, function(err, vm) {
             console.log('create:', err, vm);
             if (err) {
               $submit.prop('disabled', false);
+              $submit.button('reset');
               return alert(err);
             }
             location.href = '/vms/' + encodeURIComponent(vm._id);

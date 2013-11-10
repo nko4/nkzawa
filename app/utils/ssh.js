@@ -146,8 +146,13 @@ SSH.prototype.addUser = function(user, isSudoer, callback) {
             }
 
             // set up sudoers
-            var cmd = util.format('echo "%s ALL=(ALL) ALL" >> /etc/sudoers.d/%s', username, username);
-            self.execWait(cmd, callback);
+            var cmd = util.format('echo "%s ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/%s', username, username);
+            self.execWait(cmd, function(err) {
+              if (err) return callback(err);
+
+              var cmd = util.format('chmod 440 /etc/sudoers.d/%s', username);
+              self.execWait(cmd, callback);
+            });
           });
         });
       });

@@ -156,18 +156,10 @@
 
       Input.prototype.enable = function() {
         this.$input.prop('disabled', false);
-
-        var self = this;
-        clearInterval(this._focusId); // for sure;
-        this._focusId = setInterval(function() {
-          // always focus to input
-          self.$input.focus();
-        }, 500);
       };
 
       Input.prototype.disable = function() {
         this.$input.prop('disabled', true);
-        clearInterval(this._focusId);
       };
     </script>
     <script type="text/javascript">
