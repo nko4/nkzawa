@@ -10,7 +10,7 @@ exports.ports = {
 
 exports.mongodb = {
   host: 'localhost',
-  database: 'vmchat',
+  database: 'vmshare',
   toString: function() {
     return util.format('mongodb://%s/%s', this.host, this.database)
   }
@@ -20,13 +20,13 @@ exports.redis = {
   db: 0
 };
 
-exports.logFormat = 'dev';
+exports.logFormat = 'default';
 
 exports.auth = {
   github: {
-    clientID: 'c0f80da9fc4605e320e6',
-    clientSecret: '1fa424877281b3d8e5e58a5091bd3142d53cd465',
-    callbackUrl: 'http://localhost/auth/github/callback'
+    clientID: '024c51319618049d3b2e',
+    clientSecret: '3b8fe6f1005f68f547a8dcacdd88f1146faa57b7',
+    callbackUrl: 'http://nkzawa.2013.nodeknockout.com/auth/github/callback'
   }
 };
 
@@ -40,4 +40,3 @@ exports.session = {
 exports.signal = {
   adapter: null
 };
-                                            signal.io
