@@ -11,7 +11,7 @@ var app = module.exports = express()
 app.set('port', process.env.PORT || env.ports.app);
 app.set('views', __dirname + '/../app/views');
 app.set('view engine', 'hjs');
-app.use(express.favicon());
+//app.use(express.favicon());
 app.use(express.logger(env.logFormat))
 app.use(express.bodyParser());
 app.use(express.methodOverride());
