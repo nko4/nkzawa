@@ -15,6 +15,10 @@ io.connect('/vms', function(socket) {
   socket.on('index', vms.index);
 });
 
+io.connect('/vms/:vmId', function(socket) {
+  socket.on('addUser', vms.addUser);
+});
+
 io.connect('/vms/:vmId/shell', shell.ssh, function(socket) {
   socket.on('write', loginRequired, shell.write);
 });

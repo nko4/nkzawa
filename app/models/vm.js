@@ -55,18 +55,24 @@ schema.virtual('host').get(function() {
   return this.containerData ? this.containerData.NetworkSettings.IPAddress : null;
 });
 
-schema.methods.addUser = function(user, isSudoer, callback) {
+schema.methods.addUser = function(userId, isSudoer, callback) {
   if ('function' == typeof isSudoer) {
     callback = isSudoer;
     isSudoer = false;
   }
 
+  if (this.users.indexOf(userId) >= 0) {
+    callback(new Error('User already exists'));
+    return;
+  }
+
   var User = require('./user')
     , self = this;
 
-  User.findById(user, function(err, user) {
+  User.findById(userId, function(err, user) {
     if (err) return callback(err);
-    if (!self.host) callback(new Error('no host'));
+    if (!user) return callback(new Error('No user exists'));
+    if (!self.host) callback(new Error('Vm doesn\'t start'));
 
     root.ssh(self.host, function(err, ssh) {
       if (err) return callback(err);
@@ -75,7 +81,7 @@ schema.methods.addUser = function(user, isSudoer, callback) {
         if (err) return callback(err);
 
         self.users.push(user);
-        callback();
+        callback(user);
       });
     });
   });

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VMChat</title>
+    <title>VMShare</title>
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/css/style.css' />
   </head>
@@ -9,7 +9,7 @@
     <div class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">VMChat</a>
+          <a class="navbar-brand" href="/">VMShare</a>
         </div>
         <ul class="nav navbar-nav">
           <li class="vote">
@@ -19,7 +19,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
         {{#user}}
-          <li><a href="#">Hello, {{user.username}}</a></li>
+          <li><a href="#"><img class="avatar-small" src="{{user.avatarUrl}}" alt="{{user.username}}"/>{{user.username}}</a></li>
           <li><a href="/logout">Logout</a></li>
         {{/user}}
         {{^user}}
@@ -29,12 +29,22 @@
       </div>
     </div>
 
+  {{#user}}
     <div class="container">
       <div class="page-header">
-      {{#user}}
         <a class="btn btn-primary btn-lg" href="/vms/new">Create a new VM</a>
-      {{/user}}
       </div>
+    </div>
+  {{/user}}
+  {{^user}}
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Share VM, collaborate through Terminals.</h1>
+        <a class="btn btn-success btn-lg" href="/login">Sign in with GitHub</a>
+      </div>
+    </div>
+  {{/user}}
+    <div class="container">
       <div class="vms"></div>
     </div>
 
