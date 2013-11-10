@@ -15,7 +15,7 @@ io.connect('/vms', function(socket) {
   socket.on('index', vms.index);
 });
 
-io.connect('/vms/:vmId/commands', function(socket) {
-  socket.on('exec', loginRequired, commands.exec);
+io.connect('/vms/:vmId/commands', commands.ssh, function(socket) {
+  socket.on('write', loginRequired, commands.write);
   socket.on('index', commands.index);
 });

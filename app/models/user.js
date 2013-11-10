@@ -4,8 +4,9 @@ var mongoose = require('mongoose')
   , check = require('validator').check
   , jsonSelect = require('mongoose-json-select')
   , keygen = require('ssh-keygen')
+  , mktmpdir = require('mktmpdir')
   , plugins = require('./plugins')
-  , mktmpdir = require('mktmpdir');
+  , ssh = require('../utils/ssh');
 
 
 var schema = new mongoose.Schema({
@@ -158,6 +159,14 @@ schema.methods.keygen = function(callback) {
       done();
     });
   }, callback);
+};
+
+schema.methods.ssh = function(host, callback) {
+  if (!this.key) {
+    throw new Error('this user has no key.');
+  }
+
+  ssh(this.username, host, this.key, callback);
 };
 
 var User = module.exports = mongoose.model('User', schema);

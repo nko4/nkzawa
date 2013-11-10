@@ -51,7 +51,7 @@ SSH.prototype.connect = function(callback) {
 }
 
 SSH.prototype.exec = function() {
-  this.connection.exec.apply(this.connection, arguments);
+  return this.connection.exec.apply(this.connection, arguments);
 };
 
 SSH.prototype.execWait = function(command, options, callback) {
@@ -60,7 +60,7 @@ SSH.prototype.execWait = function(command, options, callback) {
     options = {};
   }
 
-  this.connection.exec(command, options, function(err, stream) {
+  return this.connection.exec(command, options, function(err, stream) {
     if (err) return callback(err);
 
     var data = '';
@@ -71,6 +71,10 @@ SSH.prototype.execWait = function(command, options, callback) {
       callback(err, data);
     });
   });
+};
+
+SSH.prototype.shell = function(win, callback) {
+  return this.connection.shell.apply(this.connection, arguments);
 };
 
 SSH.prototype.end = function() {

@@ -30,19 +30,15 @@
     </div>
 
     <div class="container">
-        <h1 class="vm-show">
-          <span class="owner">{{vm._creator.username}}</span> / <span class="name">{{vm.name}}</span>
-        </h1>
+      <h1 class="vm-show">
+        <span class="owner">{{vm._creator.username}}</span> / <span class="name">{{vm.name}}</span>
+      </h1>
       <div class="row">
         <div class="col-xs-9">
-          <div class="terminal">
-            <div class="list-group commands"></div>
-            <div class="list-group input" style="display:none">
-              <a class="list-group-item input">
-                <img src="{{user.avatarUrl}}" alt="{{user.username}}"/>{{user.username}}
-                 &#36;<input type="text" name="command" value="" autofocus/>
-              </a>
-            </div>
+          <div class="terminal"></div>
+          <div class="row">
+            <div class="col-xs-2"></div>
+            <input class="col-xs-10 command-input" type="text" name="command" autofocus/>
           </div>
         </div>
         <div class="col-xs-3">
@@ -58,10 +54,15 @@
     </div>
 
     <div class="templates" style="display:none;">
-      <script type="text/plain" class="command">
-        <div class="list-group-item command">
-          <img src="{%command._creator.avatarUrl%}" alt="{%command._creator.username%}"/>{%command._creator.username%}
-          &#36;{%command.command%}
+      <script type="text/plain" class="output">
+        <div class="row">
+          <div class="col-xs-1">
+            <img class="avatar" src="{%user.avatarUrl%}" alt="{%user.username%}"/>
+          </div>
+          <div class="col-xs-11">
+            <h4>{%user.username%}</h4>
+            <pre class="output">{%data%}</pre>
+          </div>
         </div>
       </script>
     </div>
@@ -76,44 +77,59 @@
 
       socket.on('connect', function() {
         var $terminal = $('.terminal');
-        var $commands = $terminal.find('.commands');
-        var $commandInput = $terminal.find('input[name="command"]');
         var $templates = $('.templates');
-        var commandTemplate = Hogan.compile($templates.find('.command').text(), hoganOption);
+        var outputTemplate = Hogan.compile($templates.find('.output').text(), hoganOption);
+        var input = new Input();
+        var lastUser = null;
+        var $lastOutput = null;
 
-        function prepareInput() {
-          $terminal.find('.list-group.input').show();
-
-          // always focus to input
-          setInterval(function() {
-            $commandInput.focus();
-          }, 500);
+        function scrollableHeight() {
+          return $terminal[0].scrollHeight - $terminal.height();
         }
 
-        socket.emit('index', function(err, commands) {
-          if (err) return alert(err);
+        socket.on('output', function(data) {
+          var mustScroll = $terminal.scrollTop() + 50 > scrollableHeight();
 
-          var html = $.map(commands, function(command) {
-            return commandTemplate.render({command: command});
-          }).join('');
-          $commands.html(html);
+          if (!lastUser || lastUser._id !== data.user._id) {
+            lastUser = data.user;
+            $lastOutput = $(outputTemplate.render(data));
+            $terminal.append($lastOutput);
+          } else {
+            var $output = $lastOutput.find('.output');
+            $output.text($output.text() + data.data);
+          }
 
-          prepareInput();
+          if (mustScroll) {
+            $terminal.scrollTop(scrollableHeight() + 1);
+          }
         });
 
-        var $command = $('input[name="command"]').keyup(function(e) {
+        input.$input.keyup(function(e) {
           if (e.which !== 13) return;
 
-          var command = $command.val();
-          $command.val('');
-
-          socket.emit('exec', {command: command}, function(err, command) {
-            console.log('exec:', err, command);
-            var html = commandTemplate.render({command: command});
-            $commands.append(html);
-          });
+          var command = input.value();
+          socket.emit('write', {command: command});
+          input.clear();
         });
       });
+
+      function Input() {
+        this.$input = $('.command-input');
+
+        var self = this;
+        this._focusId = setInterval(function() {
+          // always focus to input
+          self.$input.focus();
+        }, 500);
+      }
+
+      Input.prototype.value = function() {
+        return this.$input.val();
+      };
+
+      Input.prototype.clear = function() {
+        this.$input.val('');
+      };
     </script>
   </body>
 </html>

@@ -5,8 +5,7 @@ var mongoose = require('mongoose')
 
 var schema = new Schema({
   command: {type: String, required: true},
-  stdout: String,
-  stderr: String,
+  output: String,
   _vm: {type: ObjectId, ref: 'VM', required: true},
   _creator: {type: ObjectId, ref: 'User', required: true},
   created: {type: Date, default: Date.now, index: true}

@@ -74,30 +74,19 @@
 }
 
 .terminal {
-  border: 1px solid #dddddd;
   max-height: 500px;
+  overflow: auto;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-.terminal .list-group {
-  margin-bottom: 0;
+.terminal .avatar {
+  width: 48px;
+  height: 48px;
+  margin-top: 10px;
 }
 
-.terminal .list-group-item {
-  border: none;
-  padding-top: 3px;
-  padding-bottom: 3px;
-}
-
-.terminal .list-group-item:hover {
-  background-color: transparent;
-}
-
-.terminal .input input {
-  border: none;
-  width: 570px;
-}
-
-.terminal .input input:focus {
-  outline: 0 none;
+.command-input {
+  margin: 0 0 0 90px;
 }
 
