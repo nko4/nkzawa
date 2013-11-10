@@ -3,6 +3,8 @@
   <head>
     <title>{{vm.name}} - VM</title>
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='/css/bootstrap-modal-bs3patch.css' />
+    <link rel='stylesheet' href='/bower_components/bootstrap-modal/css/bootstrap-modal.css' />
     <link rel='stylesheet' href='/css/style.css' />
   </head>
   <body>
@@ -37,11 +39,17 @@
         <div class="col-xs-9">
           <div class="terminal"></div>
           <div class="row">
-            <div class="col-xs-2"></div>
-            <input class="col-xs-10 command-input" type="text" name="command" autofocus/>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-11">
+              <div class="input-group command-input-group">
+                <span class="input-group-addon">$</span>
+                <input class="form-control command-input" type="text" name="command" autofocus/>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-xs-3">
+          <button type="button" class="btn btn-primary add-user">Add a User</button>
           <div class="list-group users">
           {{#vm.users}}
             <a class="list-group-item user">
@@ -50,6 +58,21 @@
           {{/vm.users}}
           </div>
         </div>
+      </div>
+    </div>
+    <hr/>
+
+    <div id="add-user-modal" class="modal" tabindex="-1" data-width="760" style="display:none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Add a User</h4>
+      </div>
+      <div class="modal-body">
+        <p><input class="form-control" name="username" placeholder="username" type="text"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+        <button type="button" class="btn btn-primary">Add</button>
       </div>
     </div>
 
@@ -70,18 +93,69 @@
     <script src="/signal.io/socket.io.js"></script>
     <script src="/bower_components/jquery/jquery.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
+    <script src="/bower_components/bootstrap-modal/js/bootstrap-modal.js"></script>
     <script src="/bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.js"></script>
+    <script type="text/javascript">
+      $.fn.modal.defaults.spinner = $.fn.modalmanager.defaults.spinner =
+        '<div class="loading-spinner" style="width: 200px; margin-left: -100px;">' +
+          '<div class="progress progress-striped active">' +
+            '<div class="progress-bar" style="width: 100%;"></div>' +
+          '</div>' +
+        '</div>';
+    </script>
+    <script type="text/javascript">
+      function Input() {
+        this.$input = $('.command-input');
+        this.enable();
+      }
+
+      Input.prototype.value = function() {
+        return this.$input.val();
+      };
+
+      Input.prototype.clear = function() {
+        this.$input.val('');
+      };
+
+      Input.prototype.enable = function() {
+        this.$input.prop('disabled', false);
+
+        var self = this;
+        clearInterval(this._focusId); // for sure;
+        this._focusId = setInterval(function() {
+          // always focus to input
+          self.$input.focus();
+        }, 500);
+      };
+
+      Input.prototype.disable = function() {
+        this.$input.prop('disabled', true);
+        clearInterval(this._focusId);
+      };
+    </script>
     <script type="text/javascript">
       var socket = io('/vms/{{vm._id}}/shell', {path: '/signal.io'});
       var hoganOption = {delimiters: '{% %}'};
+      var input = new Input();
+      var $templates = $('.templates');
 
       socket.on('connect', function() {
         var $terminal = $('.terminal');
-        var $templates = $('.templates');
         var outputTemplate = Hogan.compile($templates.find('.output').text(), hoganOption);
-        var input = new Input();
         var lastUser = null;
         var $lastOutput = null;
+
+        var $addUser = $('.add-user');
+        var $addUserModal = $('#add-user-modal');
+        $addUser.click(function(e) {
+          input.disable();
+          $addUserModal.on('hidden', function() {
+            input.enable();
+          });
+
+          $addUserModal.modal();
+        });
 
         function scrollableHeight() {
           return $terminal[0].scrollHeight - $terminal.height();
@@ -112,24 +186,6 @@
           input.clear();
         });
       });
-
-      function Input() {
-        this.$input = $('.command-input');
-
-        var self = this;
-        this._focusId = setInterval(function() {
-          // always focus to input
-          self.$input.focus();
-        }, 500);
-      }
-
-      Input.prototype.value = function() {
-        return this.$input.val();
-      };
-
-      Input.prototype.clear = function() {
-        this.$input.val('');
-      };
     </script>
   </body>
 </html>
