@@ -97,6 +97,7 @@
 
     <script src="/signal.io/socket.io.js"></script>
     <script src="/bower_components/jquery/jquery.js"></script>
+    <script src="/bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/bower_components/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
     <script src="/bower_components/bootstrap-modal/js/bootstrap-modal.js"></script>
@@ -202,6 +203,11 @@
           var command = input.value();
           shellSocket.emit('write', command);
           input.clear();
+        });
+
+        input.$input.bind('keydown', 'ctrl+c', function(e) {
+          console.log('Ctrl-C');
+          shellSocket.emit('signal', 'INT');
         });
       });
 

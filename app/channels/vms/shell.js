@@ -50,3 +50,28 @@ exports.write = function(req, res) {
   req.socket.shell.write(command + '\n');
 };
 
+exports.signal = function(req, res) {
+  var signal = (req.body + '').toUpperCase();
+  if (SIGNALS.indexOf(signal) < 0) {
+    // Invalid signal, just ignore;
+    return;
+  }
+
+  req.socket.shell.signal(signal);
+};
+
+var SIGNALS = [
+  'ABRT',
+  'ALRM',
+  'FPE',
+  'HUP',
+  'ILL',
+  'INT',
+  'KILL',
+  'PIPE',
+  'QUIT',
+  'SEGV',
+  'TERM',
+  'USR1',
+  'USR2'
+];

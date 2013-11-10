@@ -21,4 +21,5 @@ io.connect('/vms/:vmId', function(socket) {
 
 io.connect('/vms/:vmId/shell', shell.ssh, function(socket) {
   socket.on('write', loginRequired, shell.write);
+  socket.on('signal', loginRequired, shell.signal);
 });
