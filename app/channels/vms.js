@@ -19,7 +19,7 @@ exports.create = function(req, res) {
 };
 
 exports.index = function(req, res) {
-  var conditions = _.pick(req.body, 'name _creator users');
+  var conditions = _.pick(req.body, 'name', '_creator', 'users');
   VM.find(conditions)
     .populate('_creator')
     .populate('users')

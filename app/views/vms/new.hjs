@@ -18,7 +18,7 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#"><img class="avatar-small" src="{{user.avatarUrl}}" alt="{{user.username}}"/>{{user.username}}</a></li>
+          <li><a href="/users/{{user._id}}"><img class="avatar-small" src="{{user.avatarUrl}}" alt="{{user.username}}"/>{{user.username}}</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
       </div>

@@ -15,15 +15,16 @@ var OPTIONS = {
 };
 
 var schema = new Schema({
-  name: {type: String, required: true},
-  _creator: {type: ObjectId, ref: 'User', required: true},
-  users: [{type: ObjectId, ref: 'User'}],
+  name: {type: String, required: true, index: true},
+  _creator: {type: ObjectId, ref: 'User', required: true, index: true},
+  users: [{type: ObjectId, ref: 'User', index: true}],
   containerId: String,
   containerData: Object,
   created: {type: Date, default: Date.now, index: true}
 });
 
 schema.index({name: 1, created: -1});
+schema.index({_creator: 1, created: -1});
 
 schema.plugin(jsonSelect, 'name _creator users created');
 

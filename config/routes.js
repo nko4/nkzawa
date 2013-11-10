@@ -2,7 +2,8 @@
 var app = require('./app')
   , routes = require('../app/routes')
   , auth = require('../app/routes/auth')
-  , vms = require('../app/routes/vms');
+  , vms = require('../app/routes/vms')
+  , users = require('../app/routes/users');
 
 
 function loginRequired(req, res, next) {
@@ -27,3 +28,6 @@ app.param('vmId', vms.vmId);
 app.get('/vms/new', loginRequired, vms.new);
 app.get('/vms/:vmId', vms.show);
 
+// users
+app.param('userId', users.userId);
+app.get('/users/:userId', users.show);

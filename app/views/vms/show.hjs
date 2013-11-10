@@ -21,7 +21,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
         {{#user}}
-          <li><a href="#"><img class="avatar-small" src="{{user.avatarUrl}}" alt="{{user.username}}"/>{{user.username}}</a></li>
+          <li><a href="/users/{{user._id}}"><img class="avatar-small" src="{{user.avatarUrl}}" alt="{{user.username}}"/>{{user.username}}</a></li>
           <li><a href="/logout">Logout</a></li>
         {{/user}}
         {{^user}}
@@ -33,7 +33,7 @@
 
     <div class="container">
       <h1 class="vm-show">
-        <span class="owner">{{vm._creator.username}}</span> / <a class="name" href="">{{vm.name}}</a>
+        <a class="owner" href="/users/{{vm._creator._id}}" style="font-weight:normal;">{{vm._creator.username}}</a> / <a class="name" href="">{{vm.name}}</a>
       </h1>
       <div class="row">
         <div class="col-xs-9">
@@ -52,7 +52,7 @@
           <button type="button" class="btn btn-primary add-user-btn collaboratorsOnly" disabled>Add a User</button>
           <div class="list-group users">
           {{#vm.users}}
-            <a class="list-group-item user">
+            <a class="list-group-item user" href="/users/{{_id}}">
               <img src="{{avatarUrl}}" alt="{{username}}"/>{{username}}
             </a>
           {{/vm.users}}
@@ -89,7 +89,7 @@
         </div>
       </script>
       <script type="text/plain" class="user">
-        <a class="list-group-item user">
+        <a class="list-group-item user" href="/users/{%_id%}">
           <img src="{%avatarUrl%}" alt="{%username%}"/>{%username%}
         </a>
       </script>
